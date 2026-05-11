@@ -1,8 +1,5 @@
 param location string = resourceGroup().location
-param prefix string = 'notif'
 param keyVaultName string = 'kv-${uniqueString(resourceGroup().id)}'
-
-var uniqueName = '${prefix}-${uniqueString(resourceGroup().id)}'
 
 // 1. Create the Key Vault to store the secret
 resource kv 'Microsoft.KeyVault/vaults@2023-07-01' = {
@@ -18,19 +15,21 @@ resource kv 'Microsoft.KeyVault/vaults@2023-07-01' = {
   }
 }
 
-resource nhNamespace 'Microsoft.NotificationHubs/namespaces@2023-10-01-preview' = {
-  name: 'nhns-${uniqueName}'
+
+// 1. The Namespace
+resource nhNamespace 'Microsoft.NotificationHubs/namespaces@2023-09-01' = {
+  name: 'nh-ns-${uniqueString(resourceGroup().id)}'
   location: location
   sku: {
-    name: 'Standard'
+    name: 'Free'
   }
 }
 
-resource notificationHub 'Microsoft.NotificationHubs/namespaces/notificationHubs@2023-10-01-preview' = {
-  parent: nhNamespace
-  name: 'hub-${uniqueName}'
+// 2. The Notification Hub
+resource notificationHub 'Microsoft.NotificationHubs/namespaces/notificationHubs@2023-09-01' = {
+  parent: nhNamespace // This creates the "Implicit Dependency"
+  name: 'nh-core-prod'
   location: location
-  properties: {}
 }
 
 resource sendAuthRule 'Microsoft.NotificationHubs/namespaces/notificationHubs/authorizationRules@2023-10-01-preview' = {
