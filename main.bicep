@@ -15,7 +15,6 @@ resource kv 'Microsoft.KeyVault/vaults@2023-07-01' = {
   }
 }
 
-
 // 1. The Namespace
 resource nhNamespace 'Microsoft.NotificationHubs/namespaces@2023-09-01' = {
   name: 'nh-ns-${uniqueString(resourceGroup().id)}'
@@ -27,9 +26,13 @@ resource nhNamespace 'Microsoft.NotificationHubs/namespaces@2023-09-01' = {
 
 // 2. The Notification Hub
 resource notificationHub 'Microsoft.NotificationHubs/namespaces/notificationHubs@2023-09-01' = {
-  parent: nhNamespace // This creates the "Implicit Dependency"
+  parent: nhNamespace
   name: 'nh-core-prod'
   location: location
+  // Manual override to ensure the Namespace is 100% ready
+  dependsOn: [
+    nhNamespace
+  ]
 }
 
 resource sendAuthRule 'Microsoft.NotificationHubs/namespaces/notificationHubs/authorizationRules@2023-10-01-preview' = {

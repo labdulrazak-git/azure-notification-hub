@@ -24,10 +24,11 @@ jobs:
         run: |
           az account set --subscription "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
 
-      # 4. Create the Resource Group (The "Bucket")
+      # 4. Create the Resource Group
       - name: Create Resource Group
         run: |
-          az group create --name rg-notifications-prod --location eastus
+          # Changed location from eastus to uksouth
+          az group create --name rg-notifications-prod --location uksouth
 
       # 5. Deploy the Bicep template (The "Blueprint")
       - name: Deploy Bicep Template
