@@ -25,7 +25,7 @@ resource nhNamespace 'Microsoft.NotificationHubs/namespaces@2023-09-01' = {
   sku: { name: 'Free' }
 }
 
-// 4. The Delay Script (Now with Identity)
+// 4. The Delay Script (Upgraded to Version 11.0)
 resource delayScript 'Microsoft.Resources/deploymentScripts@2023-08-01' = {
   name: 'waitForNamespace'
   location: location
@@ -37,7 +37,8 @@ resource delayScript 'Microsoft.Resources/deploymentScripts@2023-08-01' = {
     }
   }
   properties: {
-    azPowerShellVersion: '10.0'
+    // UPDATED: Moving to 11.0 to satisfy the Azure Linter and Ubuntu 20.04 requirements
+    azPowerShellVersion: '11.0' 
     scriptContent: 'Start-Sleep -Seconds 30'
     retentionInterval: 'P1D'
     cleanupPreference: 'OnSuccess'
