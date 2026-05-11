@@ -26,13 +26,9 @@ resource nhNamespace 'Microsoft.NotificationHubs/namespaces@2023-09-01' = {
 
 // 2. The Notification Hub
 resource notificationHub 'Microsoft.NotificationHubs/namespaces/notificationHubs@2023-09-01' = {
-  parent: nhNamespace
+  parent: nhNamespace // This creates the "Implicit Dependency" automatically
   name: 'nh-core-prod'
   location: location
-  // Manual override to ensure the Namespace is 100% ready
-  dependsOn: [
-    nhNamespace
-  ]
 }
 
 resource sendAuthRule 'Microsoft.NotificationHubs/namespaces/notificationHubs/authorizationRules@2023-10-01-preview' = {
