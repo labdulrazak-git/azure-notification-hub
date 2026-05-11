@@ -25,7 +25,6 @@ jobs:
           az account set --subscription "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
 
       # 4. Create the Resource Group (The "Bucket")
-      # We use 'az group create' because Bicep is currently scoped to the Resource Group level
       - name: Create Resource Group
         run: |
           az group create --name rg-notifications-prod --location eastus
@@ -36,5 +35,6 @@ jobs:
         with:
           resourceGroupName: rg-notifications-prod
           template: ./main.bicep
-          # This prevents the job from failing on minor CLI warnings
+          # FIX: This unique name prevents the "DeploymentActive" lock error
+          deploymentName: 'deploy-${{ github.run_id }}-${{ github.run_number }}'
           failOnStdErr: false
