@@ -19,11 +19,13 @@ resource kv 'Microsoft.KeyVault/vaults@2023-07-01' = {
   }
 }
 
-// 3. The Namespace
+// 3. The Namespace (Pivoting to Basic to bypass Free-tier cluster issues)
 resource nhNamespace 'Microsoft.NotificationHubs/namespaces@2023-09-01' = {
   name: 'nh-ns-${uniqueString(resourceGroup().id)}'
   location: location
-  sku: { name: 'Free' }
+  sku: { 
+    name: 'Basic' // Changed from 'Free'
+  }
 }
 
 // 4. The Delay Script (Upgraded to Version 11.0)
