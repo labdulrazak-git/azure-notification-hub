@@ -16,5 +16,5 @@ The script deploys the following hierarchy:
    - Logged in via `az login`.
 2. **Run Deployment**:
    ```bash
-   chmod +x deploy.sh
-   ./deploy.sh
+   chmod +x myscript.sh
+   ./myscript.sh
